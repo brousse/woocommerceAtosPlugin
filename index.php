@@ -149,6 +149,7 @@ function woocommerce_atos_init()
             $this->cancel_return_url      = $this->get_option( 'woocommerce_atos_cancel_return_url' );
             $this->automatic_response_url = $this->get_option( 'woocommerce_atos_automatic_response_url' );
             $this->normal_return_url      = $this->get_option( 'woocommerce_atos_normal_return_url' );
+            $this->atos_css_file		  = $this->get_option( 'woocommerce_atos_css_file' );
             $this->logo_id                = $this->get_option( 'woocommerce_atos_logo_id' );
             $this->logo_id2               = $this->get_option( 'woocommerce_atos_logo_id2' );
             $this->advert                 = $this->get_option( 'woocommerce_atos_advert' );
@@ -219,6 +220,12 @@ function woocommerce_atos_init()
                     'description' => __( 'Return url when a user click on the << Back to the shop >> button',
                         'woocommerce-atos' ),
                     'default'     => site_url( '/thankyou' )
+                ),
+                'woocommerce_atos_css_file'               => array(
+                    'title'       => __( 'CSS file', 'woocommerce-atos' ),
+                    'type'        => 'text',
+                    'description' => __( 'CSS file to use for payment page hosted by ATOS. Leave empty for not using that parameter.', 'woocommerce-atos' ),
+                    'default'     => ''
                 ),
                 'woocommerce_atos_logo_id'               => array(
                     'title'       => __( 'Logo id', 'woocommerce-atos' ),
@@ -338,6 +345,8 @@ function woocommerce_atos_init()
             $this->addParam( 'logo_id', $this->logo_id );
             $this->addParam( 'logo_id2', $this->logo_id2 );
             $this->addParam( 'advert', $this->advert );
+            if (!empty($this->atos_css_file))				
+                $this->addParam( 'data', '<USE_CSS>;' . $this->atos_css_file . '</USE_CSS>;' );
 
             $parm         = escapeshellcmd( $this->getParams() );
             $result       = exec( "$path_bin_request $parm" );
